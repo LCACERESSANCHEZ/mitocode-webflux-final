@@ -1,6 +1,7 @@
 package com.lcaceres.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,12 +24,16 @@ public class Tuition {
     @EqualsAndHashCode.Include
     private String id;
 
+    @NotNull
     private Student student;
 
+    @NotNull
     private List<Course> courseList;
 
+    @NotNull
     private LocalDate enrollmentDate;
 
+    @NotNull
     private Boolean state;
 
 }

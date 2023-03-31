@@ -2,6 +2,7 @@ package com.lcaceres.handler;
 
 import com.lcaceres.model.Course;
 import com.lcaceres.service.ICourseService;
+import com.lcaceres.validator.RequestValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -18,13 +19,13 @@ public class CourseHandler {
 
     private final ICourseService service;
 
-    //private final IcourseService requestValidator;
+    private final RequestValidator requestValidator;
 
     public Mono<ServerResponse> save(ServerRequest req){
         Mono<Course> courseMono = req.bodyToMono(Course.class);
 
         return courseMono
-                //.flatMap(requestValidator::validate)
+                .flatMap(requestValidator::validate)
                 .flatMap(service::save)
                 .flatMap(course -> ServerResponse
                         .created(URI.create(req.uri().toString().concat("/").concat(course.getId())))
@@ -65,7 +66,7 @@ public class CourseHandler {
 
                     return db;
                 })
-                //.flatMap(requestValidator::validate)
+                .flatMap(requestValidator::validate)
                 .flatMap(service::update)
                 .flatMap(course -> ServerResponse
                         .ok()

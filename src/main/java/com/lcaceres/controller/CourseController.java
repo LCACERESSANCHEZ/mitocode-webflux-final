@@ -1,9 +1,9 @@
 package com.lcaceres.controller;
 
 import com.lcaceres.model.Course;
-import com.lcaceres.model.Student;
 import com.lcaceres.service.ICourseService;
 import com.lcaceres.util.Constants;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,7 +23,7 @@ public class CourseController {
     private final ICourseService service;
 
     @PostMapping("/save")
-    public Mono<ResponseEntity<Course>> save(@RequestBody Course course, final ServerHttpRequest req){
+    public Mono<ResponseEntity<Course>> save(@Valid @RequestBody Course course, final ServerHttpRequest req){
         return service.save(course)
                 .map(e -> ResponseEntity
                         .created(URI.create(req.getURI().toString().concat("/").concat(e.getId())))
@@ -53,7 +53,7 @@ public class CourseController {
     }
 
     @PutMapping("/update/{id}")
-    public Mono<ResponseEntity<Course>> update(@PathVariable("id") String id, @RequestBody Course course) {
+    public Mono<ResponseEntity<Course>> update(@Valid @PathVariable("id") String id, @RequestBody Course course) {
         course.setId(id);
 
         Mono<Course> monoBody = Mono.just(course);

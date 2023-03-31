@@ -2,6 +2,7 @@ package com.lcaceres.handler;
 
 import com.lcaceres.model.Tuition;
 import com.lcaceres.service.ITuitionService;
+import com.lcaceres.validator.RequestValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -18,11 +19,13 @@ public class TuitionHandler {
 
     private final ITuitionService service;
 
+    private final RequestValidator requestValidator;
+
     public Mono<ServerResponse> save(ServerRequest req){
         Mono<Tuition> tuitionMono = req.bodyToMono(Tuition.class);
 
         return tuitionMono
-                //.flatMap(requestValidator::validate)
+                .flatMap(requestValidator::validate)
                 .flatMap(service::save)
                 .flatMap(tuition -> ServerResponse
                         .created(URI.create(req.uri().toString().concat("/").concat(tuition.getId())))
